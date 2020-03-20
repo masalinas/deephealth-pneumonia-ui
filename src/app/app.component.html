@@ -1,0 +1,49 @@
+<h1>Deep Health</h1>
+<h2>Pneumonia Predictor</h2>
+<h3>Author <a href="mailto:miguel@thingtrack.com">Miguel Salinas Gancedo </a></h3>
+<h3>Power by <a href="http://www.thingtrack.com" target="_blank">Thingtrack</a></h3>
+<p>The predictor rated the presence of Pneumonia in each image on a scale of 0 to 3, according to the following scale:
+</p>
+
+<ul>
+  <li>0 - No Pneumonia</li>
+  <li>1 - Bacterial Pneumonia like Streptococcus </li>
+  <li>2 - Viric Pneumonia like Influenza A, Covid-19</li>
+</ul>
+
+<label for="singleFile">Upload image</label>
+<br>
+<input id="singleFile" type="file" accept='image/*' [fileUploadInputFor]= "fileUploadQueue"/>
+<br>
+<mat-file-upload-queue #fileUploadQueue
+    [fileAlias]="'file'"
+    [httpUrl]="httpUrl">
+
+    <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index" (onUpload)="onUpload($event)" (removeEvent)="removeEvent($event)"></mat-file-upload>
+</mat-file-upload-queue>
+
+<br>
+<br>
+
+<mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile>
+        <div *ngIf="imgURL" class="footer-image">
+          <b>Image:</b> {{image.name}}
+        </div>
+
+        <img [src]="imgURL" height="85%" *ngIf="imgURL">
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <canvas baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+    </canvas>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<div [class.loading-indicator]="showSpinner==true">
+    <mat-progress-spinner mode="indeterminate" color="accent" *ngIf="showSpinner"></mat-progress-spinner>
+</div>
